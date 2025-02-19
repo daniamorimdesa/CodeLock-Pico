@@ -6,6 +6,17 @@ CodeLock is a secure digital safe system developed as part of the EmbarcaTech co
 
 ![cIRCUITO DESENVOLVIDO](media/1.JPG)
 
+## Usage Instructions:
+```
+  - Default password: 1234
+  - Enter a 4-digit password and press '#' to validate.
+  - Press '*' to reset the input and enter the password again.
+  - Press 'A' to set a new 4-digit password and confirm with '#'.
+  - If the wrong password is entered 3 times, the system will lock for 10 seconds.
+  - After the safe is opened, press 'C' to close it.
+    
+```
+
 ## What is EmbarcaTech? 
 **EmbarcaTech** is a professional training program aimed at university students in Information and Communication Technology (ICT) and related areas, focusing on **Embedded Systems and Internet of Things (IoT)**. The program consists of two phases:
 
