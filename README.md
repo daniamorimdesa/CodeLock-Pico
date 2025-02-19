@@ -25,7 +25,7 @@ This project is part of the first phase of the program, serving as a hands-on em
 - Password update functionality through a dedicated input mode.
 - Modular software architecture for enhanced readability and maintainability.
 
-![cIRCUITO DESENVOLVIDO](media/5.JPG)
+![cIRCUITO DESENVOLVIDO](media/2.JPG)
 
 ---
 
@@ -42,7 +42,7 @@ This project is part of the first phase of the program, serving as a hands-on em
 ##  Simulation  
 Check out the full simulation on Wokwi by clicking [here](https://wokwi.com/projects/422850803418757121). 
 
-![cIRCUITO DESENVOLVIDO](media/7.JPG)
+![cIRCUITO DESENVOLVIDO](media/3.JPG)
 
 ---
 
