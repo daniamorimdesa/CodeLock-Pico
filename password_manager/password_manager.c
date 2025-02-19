@@ -15,6 +15,8 @@ static bool safe_open = false;
 static char entered_password[5];
 static int password_pos = 0;
 static bool changing_password = false;
+static bool verifying_old_password = false; // flag to verify current password
+static char temp_new_password[5];  // Temporarily stores new password before confirmation
 
 // Validates the entered password
 bool validate_password(const char *entered_password) {
@@ -25,6 +27,8 @@ bool validate_password(const char *entered_password) {
 void save_new_password(const char *new_password, ssd1306_t *oled) {
   strcpy(correct_password, new_password);
   oled_show_password_saved(oled);
+  sleep_ms(2000);
+  oled_show_enter_password(oled);
 }
 
 // Handles incorrect password attempts
@@ -40,8 +44,8 @@ void handle_incorrect_attempt(ssd1306_t *oled) {
     sleep_ms(200);
   }
 
-  sleep_ms(2000);  // **Short delay before returning to password entry**
-  oled_show_enter_password(oled);  // **Show "Enter the password" again**
+  sleep_ms(2000);
+  oled_show_enter_password(oled);
 
   if (wrong_attempts >= 3) { // Lock system after 3 failed attempts
     locked = true;
@@ -68,7 +72,7 @@ void handle_safe_open(char key, ssd1306_t *oled) {
     servo_closed();
     oled_show_safe_closed(oled);
     play_safe_closed_sound(BUZZER_PIN);
-    gpio_put(GREEN_LED, 0);  // **Turn off the green LED when the safe closes**
+    gpio_put(GREEN_LED, 0);  // Turn off the green LED when the safe closes
     sleep_ms(2000);
     oled_show_enter_password(oled);
     safe_open = false;
@@ -79,11 +83,33 @@ void handle_safe_open(char key, ssd1306_t *oled) {
 void handle_safe_closed(char key, ssd1306_t *oled) {
   if (key == '#') {  // Confirm password entry
     if (changing_password) {
-      save_new_password(entered_password, oled);
-      changing_password = false;
-    } else {
+      if (verifying_old_password) {
+        if (validate_password(entered_password)) {
+          verifying_old_password = false;
+          oled_show_new_password_mode(oled);
+          memset(entered_password, 0, sizeof(entered_password));
+          password_pos = 0;
+        } else {
+          oled_show_incorrect_password(oled);
+          sleep_ms(2000);
+          oled_show_enter_password(oled);
+          changing_password = false;
+          verifying_old_password = false;
+          password_pos = 0;
+          memset(entered_password, 0, sizeof(entered_password));
+        }
+      } else {  // Now we save the new password after confirming the old one
+        save_new_password(entered_password, oled);
+        oled_show_password_saved(oled);
+        sleep_ms(2000);
+        oled_show_enter_password(oled);
+        changing_password = false;
+        password_pos = 0;
+        memset(entered_password, 0, sizeof(entered_password));
+      }
+    } else {  // Normal password validation
       if (validate_password(entered_password)) {
-        gpio_put(GREEN_LED, 1);  // **Turn on the green LED when the safe opens**
+        gpio_put(GREEN_LED, 1);  // Turn on the green LED when the safe opens
         oled_show_safe_open(oled);
         play_success_melody(BUZZER_PIN);
         servo_open();
@@ -91,19 +117,21 @@ void handle_safe_closed(char key, ssd1306_t *oled) {
       } else {
         handle_incorrect_attempt(oled);
       }
+      password_pos = 0;
+      memset(entered_password, 0, sizeof(entered_password));
     }
-    password_pos = 0;
-    memset(entered_password, 0, sizeof(entered_password));
 
   } else if (key == '*') {  // Reset password input
     password_pos = 0;
     memset(entered_password, 0, sizeof(entered_password));
     oled_show_password_reset(oled);
 
-  } else if (key == 'A') {  // Enter new password mode
+  } else if (key == 'A') {  // Start password change process
     changing_password = true;
-    oled_show_new_password_mode(oled);
+    verifying_old_password = true;
+    oled_show_enter_old_password(oled);
     password_pos = 0;
+    memset(entered_password, 0, sizeof(entered_password));
 
   } else if (password_pos < sizeof(entered_password) - 1) {  // Input password
     entered_password[password_pos++] = key;
