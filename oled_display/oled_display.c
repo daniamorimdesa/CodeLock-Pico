@@ -55,11 +55,19 @@ void oled_show_system_locked(ssd1306_t *oled) {
 }
 
 void oled_show_new_password_mode(ssd1306_t *oled) {
+  oled_printf(oled, "Enter new password:");
+}
+
+void oled_show_enter_old_password(ssd1306_t *oled) {
   oled_printf(oled, "Mode: New password");
+  sleep_ms(2000);  // **Short delay before returning to password entry**
+  oled_printf(oled, "Current password:");
 }
 
 void oled_show_password_reset(ssd1306_t *oled) {
   oled_printf(oled, "Password reset!");
+  sleep_ms(2000);
+  oled_printf(oled, "Enter the password:");
 }
 
 void oled_show_password_saved(ssd1306_t *oled) {
