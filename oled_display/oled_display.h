@@ -14,6 +14,7 @@ void oled_show_safe_open(ssd1306_t *oled);
 void oled_show_safe_closed(ssd1306_t *oled);
 void oled_show_system_locked(ssd1306_t *oled);
 void oled_show_new_password_mode(ssd1306_t *oled);
+void oled_show_enter_old_password(ssd1306_t *oled);
 void oled_show_password_reset(ssd1306_t *oled);
 void oled_show_password_saved(ssd1306_t *oled);
 void oled_show_password_input(ssd1306_t *oled, const char *password);
