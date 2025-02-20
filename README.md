@@ -99,8 +99,7 @@ Check out the full simulation on Wokwi by clicking [here](https://wokwi.com/proj
 ---
 
 ## Complete Documentation
-Detailed project documentation is available in the following PDF: (https://github.com/daniamorimdesa/CodeLock-Pico/blob/main/CodeLock%20documentation.pdf)
-
+Detailed project documentation is available [here](https://github.com/daniamorimdesa/CodeLock-Pico/blob/main/CodeLock%20documentation.pdf).
 
 ---
 
